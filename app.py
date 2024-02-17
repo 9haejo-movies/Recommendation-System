@@ -81,12 +81,31 @@ if st.button('Recommend'):
             images, titles, genres = get_recommendations_pop(title)
         else:
             images, titles, genres = get_recommendations_year(title)
+
+        tab_titles = ['추천 영화 10개 목록', '영화 정보']
+        tabs = st.tabs(tab_titles)
+
+        with tabs[0]:
+            idx = 0
+            for i in range(0,2):
+                cols = st.columns(5)
+                for j in range(0,5):
+                    cols[j].image(images[idx], width=100, use_column_width=True, caption=titles[idx])
+                    checkbox_key = f"checkbox_{idx}"
+                    if cols[j].write("",key=checkbox_key):
+                        cols[j].image(images[idx], width=300, use_column_width=True, caption=titles[idx])
+                    idx += 1
         
-        idx = 0
-        for i in range(0,2):
-            cols = st.columns(5)
-            for j in range(0,5):
-                cols[j].image(images[idx], width=100)
-                cols[j].write(titles[idx])
-                
-                idx += 1
+        with tabs[1]:
+            idx = 0
+            for i in range(0,2):
+                cols = st.columns(5)
+                for j in range(0,5):
+                    cols[j].image(images[idx], width=150)
+                    cols[j].write(f'✔️제목 : {titles[idx]}')
+                    genre_names = ', '.join([genre['name'] for genre in genres[idx]])
+                    cols[j].write(f'✔️장르 : {genre_names}')
+                    cols[j].write(f'✔️개봉연도 : {movies["release_date"][idx]}')
+                    idx += 1         
+
+
